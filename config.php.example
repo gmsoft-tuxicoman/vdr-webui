@@ -14,4 +14,6 @@ $vdr_host = "vdr-server";
 // VTP comes from the vdr-streamdev plugin
 $vdr_port = "2004";
 
+// Limit the maximum number of channels (optional)
+// $max_channels = 150;
 ?>
