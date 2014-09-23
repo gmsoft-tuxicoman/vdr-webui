@@ -1,0 +1,17 @@
+<?php
+
+// Title appearing on the page
+$site_title = "My awesome TV";
+
+// URL for jquery
+$jquery_url = "https://code.jquery.com/jquery-2.1.1.min.js";
+
+// Hostname of the VDR server for SVDRP/VTP connections
+$vdr_host = "vdr-server";
+
+// Use 2004 for VTP or 6419 for SVDRP
+// VTP is recommanded because it allows multiple connections at once
+// VTP comes from the vdr-streamdev plugin
+$vdr_port = "2004";
+
+?>

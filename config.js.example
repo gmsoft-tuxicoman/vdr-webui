@@ -1,0 +1,10 @@
+
+// Base of the picons URL
+var picons_url_base = "/picons";
+
+// Time divisor for time width on the page (150 -> 150sec = 1%)
+var epg_time_divisor = 150;
+
+// Length for each period displayed at the top. Default : 30 minutes
+var epg_time_period = 30 * 60;
+
