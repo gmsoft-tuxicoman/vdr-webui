@@ -1,9 +1,6 @@
 $(document).ready( function() {
 	vdr.init();
 
-	var date = new Date();
-	var now = date.getTime() / 1000;
-	var display_start = now - (now % epg_time_period);
 
 	setInterval(function() {
 		var now = new Date();
@@ -25,7 +22,7 @@ $(document).ready( function() {
 		var epg_height = $("#epg_tab")[0].clientHeight - 30;
 		var bar = $("#epg_now_bar")
 		var width = $("#epg_periods div:first-child").width();
-		var pos = ((now.getTime() / 1000) - display_start) / epg_time_divisor;
+		var pos = ((now.getTime() / 1000) - vdr.display_start) / epg_time_divisor;
 		bar.height(epg_height)
 		bar.css("margin-left",  pos + "%");
 		bar.css("margin-right", "-" + pos + "%");
@@ -41,6 +38,9 @@ vdr.init = function () {
 
 	var me = this;
 
+	var date = new Date();
+	var now = date.getTime() / 1000;
+	this.display_start = now - (now % epg_time_period);
 	$.getJSON( "vdr-json.php", "method=channels", function(data) {
 
 		me.channels = data;
@@ -92,28 +92,38 @@ vdr.loadChannels = function() {
 
 	var chans = [];
 	var epgs = [];
+	var me = this;
 	for (var idx in this.channels) {
 		var chan = this.channels[idx];
-		picon_url = this.channelPiconUrl(chan);
-		chans.push('<div id="chan_entry"><div id="chan_num" class="chan_list">' + chan['num'] + '</div><div id="chan_picon" class="chan_list"><a href="/' + chan['url'] + '"><img class="hidden" id="chan_picon_img" src="' + picon_url + '"/></a></div><div id="chan_name" class="chan_list"><a href="/' + chan['url'] + '">' + chan['name'] + '</a></div></div>');
-		epgs.push('<div id="chan_epg_' + chan['num'] + '" class="chan_epg">Loading epg ...</div>');
+		chans.push('<div class="chan_entry"><div id="chan_num" class="chan_list">' + chan['num'] + '</div><div class="chan_picon chan_list"><a href="/' + chan['url'] + '"><img id="chan_picon_' + idx + '" class="chan_picon_img"/></a></div><div id="chan_name" class="chan_list"><a href="/' + chan['url'] + '">' + chan['name'] + '</a></div></div>');
+		epgs.push('<div id="chan_epg_' + idx + '" class="chan_epg">Loading epg ...</div>');
 	};
 	$("#chan_tab").html(chans.join(""));
 	$("#epg_tab").append(epgs.join(""));
 
-	this.updateEpgs();
+	$('.chan_picon').appear();
+	$('.chan_picon').bind('appear', function() {
+		var img = $(this).find('img');
+		if (img.data('appeared'))
+			return true;
+		img.data('appeared', true);
+		var chan_id = img.attr('id').replace('chan_picon_', '');
+		var picon_url = me.channelPiconUrl(me.channels[chan_id]);
+		img.attr('src', picon_url);
+	});
 
-}
+	$(".chan_epg").appear();
+	$(".chan_epg").bind('appear', function() {
+		if ($(this).data('appeared'))
+			return true;
+		$(this).data('appeared', true);
 
-vdr.updateEpgs = function() {
+		var chan_id = $(this).attr('id').replace('chan_epg_','');
+		vdr.updateChanEpg(chan_id);
+	});
 
-	// Update the hour bar
-	var date = new Date();
-	var now = date.getTime() / 1000;
+	$.force_appear();
 
-	// Update the EPG for each channel
-	for (var idx in this.channels)
-		this.updateChanEpg(now, idx);
 }
 
 vdr.epochToHour = function(epoch) {
@@ -130,7 +140,7 @@ vdr.epochToHour = function(epoch) {
 	return hour + ':' + min;
 }
 
-vdr.updateChanEpg = function(now, chan_id) {
+vdr.updateChanEpg = function(chan_id) {
 
 	var me = this;
 
@@ -141,7 +151,6 @@ vdr.updateChanEpg = function(now, chan_id) {
 
 		var epgs = [];
 		var first = true;
-		var display_start = now - (now % epg_time_period);
 
 		var end; // Remember end time of the last event
 
@@ -152,18 +161,18 @@ vdr.updateChanEpg = function(now, chan_id) {
 			var duration = evt['duration'];
 			end = start + duration;
 
-			if (end <= display_start) // Skip events which are over
+			if (end <= me.display_start) // Skip events which are over
 				continue;
 
 			if (first) {
 				// Perform some adjustment for the first event
-				if (start > display_start) {
+				if (start > me.display_start) {
 					// We need to add some space before the event
-					var fill = (start - display_start) / epg_time_divisor;
+					var fill = (start - me.display_start) / epg_time_divisor;
 					epgs.push('<div class="epg_event_container" style="width:' + fill + '%"></div>');
-				} else if (start < display_start) {
+				} else if (start < me.display_start) {
 					// Remove the begining of the event
-					duration -= display_start - start;
+					duration -= me.display_start - start;
 				}
 				first = false;
 			}
@@ -180,7 +189,7 @@ vdr.updateChanEpg = function(now, chan_id) {
 		}
 
 		// Check if we have the time displayed for at least the end of this event + period_min
-		for (i = display_start; i < end + epg_time_period; i += epg_time_period) {
+		for (i = me.display_start; i < end + epg_time_period; i += epg_time_period) {
 			if (!$("#epg_periods #epg_period_" + i).length) {
 
 				var size = epg_time_period / epg_time_divisor;
@@ -189,7 +198,7 @@ vdr.updateChanEpg = function(now, chan_id) {
 		}
 
 
-		$("#chan_epg_" + chan_num).html(epgs.join(""));
+		$("#chan_epg_" + chan_id).html(epgs.join(""));
 
 	});
 

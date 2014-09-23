@@ -53,7 +53,7 @@ a:active {
 	padding-top: 25px;
 }
 
-#chan_entry {
+.chan_entry {
 	border-color: #0033CC;
 	border-width: 2px;
 	border-style: solid;
@@ -62,7 +62,7 @@ a:active {
 	height: 34px;
 }
 
-#chan_picon {
+.chan_picon {
 	background-color: black;
 	border-style: outset;
 	border-width: 1px;
@@ -71,7 +71,7 @@ a:active {
 	margin-right: 5px;
 }
 
-#chan_picon_img {
+.chan_picon_img {
 	width: 32px;
 	height: 32px;
 }
