@@ -47,6 +47,8 @@ vdr.init = function () {
 		me.loadChannels();
 
 	});
+
+	this.appear_checking = false;
 }
 
 vdr.channelPiconUrl = function(chan) {
@@ -101,28 +103,9 @@ vdr.loadChannels = function() {
 	$("#chan_tab").html(chans.join(""));
 	$("#epg_tab").append(epgs.join(""));
 
-	$('.chan_picon').appear();
-	$('.chan_picon').bind('appear', function() {
-		var img = $(this).find('img');
-		if (img.data('appeared'))
-			return true;
-		img.data('appeared', true);
-		var chan_id = img.attr('id').replace('chan_picon_', '');
-		var picon_url = me.channelPiconUrl(me.channels[chan_id]);
-		img.attr('src', picon_url);
-	});
-
-	$(".chan_epg").appear();
-	$(".chan_epg").bind('appear', function() {
-		if ($(this).data('appeared'))
-			return true;
-		$(this).data('appeared', true);
-
-		var chan_id = $(this).attr('id').replace('chan_epg_','');
-		vdr.updateChanEpg(chan_id);
-	});
-
-	$.force_appear();
+	// Activate the check
+	$(window).scroll(vdr.checkAppearDelay).resize(vdr.checkAppearDelay);
+	this.checkAppear();
 
 }
 
@@ -148,6 +131,9 @@ vdr.updateChanEpg = function(chan_id) {
 
 	$.getJSON("vdr-json.php", "method=epg&channel=" + chan_num, function(epg) {
 		me.channels[chan_id].epg = epg;
+
+		if (!epg)
+			return;
 
 		var epgs = [];
 		var first = true;
@@ -201,5 +187,66 @@ vdr.updateChanEpg = function(chan_id) {
 		$("#chan_epg_" + chan_id).html(epgs.join(""));
 
 	});
+
+}
+
+vdr.isDisplayed = function(elem) {
+
+	var $window = $(window);
+	var window_top = $window.scrollTop();
+	var elem_offset = elem.offset();
+	var elem_top = elem_offset.top;
+	var elem_height = elem.height();
+	var window_height = $window.height();
+	if (elem_top + elem_height >= window_top && elem_top <= window_top + window_height)
+		return true;
+	return false;
+}
+
+vdr.checkAppearDelay = function() {
+
+	if (vdr.appear_checking)
+		return true;
+	vdr.appear_checking = true;
+
+	setTimeout(vdr.checkAppear(), 250);
+}
+
+vdr.checkAppear = function() {
+
+	// Find which element is displayed
+	var elems = $('.chan_picon');
+	var elem_search_offset = 10;
+
+	// Check on element out of elem_search_offset
+	var i;
+	for (i = 0; i < elems.length; i += elem_search_offset) {
+		var elem = $(elems[i]);
+		if (vdr.isDisplayed(elem)) {
+			var first = i - 1;
+			var last = i + 1;
+			// Find the first element displayed
+			for (; first > 0 && vdr.isDisplayed($(elems[first])); first--);
+
+			// Find the last elemen displayed
+			for (; last < elems.length && vdr.isDisplayed($(elems[last])); last++);
+
+			// Show all the appeared elements
+			for (i = first + 1; i < last; i++) {
+				var img = $(elems[i]).find('img');
+				if (img.data('appeared'))
+					continue;
+				img.data('appeared', true);
+				var chan_id = img.attr('id').replace('chan_picon_', '');
+				var picon_url = vdr.channelPiconUrl(vdr.channels[chan_id]);
+				img.attr('src', picon_url);
+				vdr.updateChanEpg(chan_id);
+			}
+
+			break;
+		}
+	}
+
+	vdr.appear_checking = false;
 
 }

@@ -7,7 +7,6 @@
 	<link rel="stylesheet" href="vdr.css"/>
 	<script src="<?php print $jquery_url; ?>"></script>
 	<script src="vdr.js"></script>
-	<script src="jquery.appear.js"></script>
 	<script src="config.js"></script>
 </head>
 <body>
