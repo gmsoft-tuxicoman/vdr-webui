@@ -17,7 +17,7 @@
 </div>
 
 <div id="main">
-	<div id="chan_tab">Loading channels ...</div>
+	<div id="chan_tab"><div class="loading">Loading channels ...</div></div>
 	<div id="epg_tab"><div id="epg_periods"></div><div id="epg_now_bar"></div></div>
 </div>
 </body>

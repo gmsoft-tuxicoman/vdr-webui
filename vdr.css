@@ -90,6 +90,7 @@ a:active {
 #epg_tab {
 	overflow-x: scroll;
 	vertical-align: top;
+	display: none;
 }
 
 .chan_epg {
@@ -143,3 +144,6 @@ a:active {
 	width: 2px;
 }
 
+.loading {
+	color: white;
+}
