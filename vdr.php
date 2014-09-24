@@ -28,7 +28,7 @@ function vdr_cmd($vdr, $cmd) {
 }
 
 function vdr_read($vdr) {
-	$len = 2048;
+	$len = 4096;
 	$out = socket_read($vdr['socket'], $len, PHP_NORMAL_READ);
 
 	while (strlen($out) == 1)
