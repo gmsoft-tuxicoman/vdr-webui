@@ -16,4 +16,7 @@ $vdr_port = "2004";
 
 // Limit the maximum number of channels (optional)
 // $max_channels = 150;
+
+// Base url for streams
+//$vdr_stream_url_base = "/vdr-luigi/";
 ?>

@@ -22,7 +22,10 @@ print "#EXTM3U\n";
 
 foreach ($channels as $chan) {
 	print "#EXTINF:-1," . $chan['num'] . " " . $chan['name'] . "\n";
-	print $proto . $creds . $host . '/' . $chan['url'] . "\n";
+	$base = '/';
+	if (isset($vdr_stream_url_base))
+		$base = $vdr_stream_url_base;
+	print $proto . $creds . $host . $base . $chan['url'] . "\n";
 }
 
 

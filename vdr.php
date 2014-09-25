@@ -67,7 +67,7 @@ function vdr_close($vdr) {
 
 
 
-function vdr_get_channels($vdr) {
+function vdr_get_channels($vdr, $stream_base_url) {
 
 	$chans = [];
 
@@ -116,7 +116,7 @@ function vdr_get_channels($vdr) {
 		$chan['sid'] = $splitted[9];
 		$chan['nid'] = $splitted[10];
 		$chan['tid'] = $splitted[11];
-		$chan['url'] = $chan['source'] . "-" . $chan['nid'] . "-" . $chan['tid'] . "-" . $chan['sid'] . ".ts";
+		$chan['url'] = $stream_base_url . $chan['source'] . "-" . $chan['nid'] . "-" . $chan['tid'] . "-" . $chan['sid'] . ".ts";
 
 		$chans[$num] = $chan;
 
