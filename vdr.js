@@ -4,6 +4,20 @@ $(document).ready( function() {
 
 	setInterval(function() {
 		var now = new Date();
+
+		// Check if EPG need to be refreshed
+		var epoch = now.getTime() / 1000;
+		if (epoch > vdr.display_start + epg_refresh_time) {
+			// Reset display start
+			vdr.display_start = epoch - (epoch % epg_time_period);
+			// Remove EPG
+			$("#epg_periods").empty();
+			$(".chan_epg").empty();
+			$(".chan_epg").html('<div class="loading">Loading EPG ...</div>');
+			$(".chan_picon_img").data('appeared', false);
+			vdr.checkAppear();
+		}
+
 		var day = now.getDate();
 		var month = now.getMonth();
 		var year = now.getFullYear();
@@ -28,6 +42,7 @@ $(document).ready( function() {
 		bar.css("margin-right", "-" + pos + "%");
 		
 		bar.css("margin-bottom", "-" + (epg_height + 5) + "px");
+
 
 	}, 1000);
 });
@@ -54,7 +69,8 @@ vdr.init = function () {
 vdr.channelPiconUrl = function(chan) {
 
 	var hash;
-	src = chan['source'];
+	var src = chan['source'];
+	var pos;
 
 	if (src == "T") {
 		hash = 0xEEEE0000;
@@ -98,7 +114,7 @@ vdr.loadChannels = function() {
 	for (var idx in this.channels) {
 		var chan = this.channels[idx];
 		chans.push('<div class="chan_entry"><div id="chan_num" class="chan_list">' + chan['num'] + '</div><div class="chan_picon chan_list"><a href="' + chan['url'] + '"><img id="chan_picon_' + idx + '" class="chan_picon_img"/></a></div><div id="chan_name" class="chan_list"><a href="' + chan['url'] + '">' + chan['name'] + '</a></div></div>');
-		epgs.push('<div id="chan_epg_' + idx + '" class="chan_epg"><div class="loading">Loading epg ...</div></div>');
+		epgs.push('<div id="chan_epg_' + idx + '" class="chan_epg"><div class="loading">Loading EPG ...</div></div>');
 	};
 	$("#chan_tab .loading").remove();
 	$("#chan_tab").append(chans.join(""));

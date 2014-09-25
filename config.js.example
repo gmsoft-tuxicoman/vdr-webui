@@ -8,3 +8,6 @@ var epg_time_divisor = 150;
 // Length for each period displayed at the top. Default : 30 minutes
 var epg_time_period = 30 * 60;
 
+// How often the EPG should be refreshed
+// MUST NOT BE LESS THAN epg_time_period
+var epg_refresh_time = epg_time_period;
