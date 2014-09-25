@@ -100,7 +100,8 @@ vdr.loadChannels = function() {
 		chans.push('<div class="chan_entry"><div id="chan_num" class="chan_list">' + chan['num'] + '</div><div class="chan_picon chan_list"><a href="/' + chan['url'] + '"><img id="chan_picon_' + idx + '" class="chan_picon_img"/></a></div><div id="chan_name" class="chan_list"><a href="/' + chan['url'] + '">' + chan['name'] + '</a></div></div>');
 		epgs.push('<div id="chan_epg_' + idx + '" class="chan_epg"><div class="loading">Loading epg ...</div></div>');
 	};
-	$("#chan_tab").html(chans.join(""));
+	$("#chan_tab .loading").remove();
+	$("#chan_tab").append(chans.join(""));
 	$("#epg_tab").append(epgs.join("")).show();
 
 	// Activate the check

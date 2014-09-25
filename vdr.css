@@ -50,7 +50,8 @@ a:active {
 #chan_tab {
 	vertical-align: top;
 	float: left;
-	padding-top: 25px;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 .chan_entry {
@@ -58,7 +59,7 @@ a:active {
 	border-width: 2px;
 	border-style: solid;
 	background-color: #6699FF;
-	margin: 5px;
+	margin-top: 5px;
 	height: 34px;
 }
 
@@ -96,7 +97,6 @@ a:active {
 .chan_epg {
 	height: 38px;
 	margin-top: 5px;
-	margin-bottom: 5px;
 	white-space: nowrap;
 }
 
@@ -120,8 +120,17 @@ a:active {
 }
 
 #epg_periods {
-	padding-bottom: 5px;
+	display: inline-block;
+}
+
+#toolbox {
 	height: 20px;
+	display: inline-block;
+	height: 1.1em;
+	width: 100%;
+	background-color: white;
+	border-style: solid;
+	border-width: 1px;
 }
 
 .epg_period_container {
@@ -134,6 +143,7 @@ a:active {
 	border-width: 1px;
 	padding-left: 3px;
 	padding-right: 3px;
+	height: 1.1em;
 }
 
 #epg_now_bar {
