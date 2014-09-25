@@ -5,7 +5,10 @@ include 'vdr.php';
 include 'config.php';
 
 $vdr = vdr_open($vdr_host, $vdr_port);
-$channels = vdr_get_channels($vdr);
+$base = '/';
+if (isset($vdr_stream_url_base))
+	$base = $vdr_stream_url_base;
+$channels = vdr_get_channels($vdr, $base);
 vdr_close($vdr);
 
 $proto = "http://";
@@ -22,10 +25,7 @@ print "#EXTM3U\n";
 
 foreach ($channels as $chan) {
 	print "#EXTINF:-1," . $chan['num'] . " " . $chan['name'] . "\n";
-	$base = '/';
-	if (isset($vdr_stream_url_base))
-		$base = $vdr_stream_url_base;
-	print $proto . $creds . $host . $base . $chan['url'] . "\n";
+	print $proto . $creds . $host . $chan['url'] . "\n";
 }
 
 

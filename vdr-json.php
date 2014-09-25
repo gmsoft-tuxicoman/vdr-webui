@@ -15,7 +15,7 @@ $output = "Unknown method";
 
 if ($method == "channels") {
 	$base = '/';
-	if (!isset($vdr_stream_url_base))
+	if (isset($vdr_stream_url_base))
 		$base = $vdr_stream_url_base;
 	$output = vdr_get_channels($vdr, $base);
 	if (isset($max_channels))
