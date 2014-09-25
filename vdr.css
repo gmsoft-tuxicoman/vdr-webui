@@ -121,6 +121,7 @@ a:active {
 
 #epg_periods {
 	display: inline-block;
+	width: 100%;
 }
 
 #toolbox {
