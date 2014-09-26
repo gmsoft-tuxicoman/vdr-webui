@@ -185,9 +185,9 @@ vdr.updateChanEpg = function(chan_id) {
 			var evt_text = evt['title'];
 			if ('short_txt' in evt)
 				evt_text += ' - ' + evt['short_txt'];
-			var evt_tooltip = me.epochToHour(start) + ' - ' + me.epochToHour(end) + '\n' + evt_text;
+			var evt_tooltip = "Title: " + evt_text + '\nTime: ' + me.epochToHour(start) + ' - ' + me.epochToHour(end);
 			if ('description' in evt)
-				evt_tooltip += '\n' + evt['description'];
+				evt_tooltip += '\nDescription: ' + evt['description'];
 			epgs.push('<div class="epg_event_container hidden" style="width:' + size + '%"><div class="epg_event" title="' + evt_tooltip + '">' + evt_text + '</div></div>');
 		}
 
