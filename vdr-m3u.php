@@ -1,5 +1,6 @@
 <?php
 header("Content-type: application/x-mpegurl");
+header("Content-Disposition: attachment; filename=" . $m3u_filename);
 
 include 'vdr.php';
 include 'config.php';
