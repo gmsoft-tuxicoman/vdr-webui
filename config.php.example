@@ -17,9 +17,9 @@ $vdr_port = "2004";
 // M3U filename
 $m3u_filename = "tv.m3u";
 
+// Base url for streams
+$vdr_stream_url_base = "/vdr/";
+
 // Limit the maximum number of channels (optional)
 // $max_channels = 150;
-
-// Base url for streams
-//$vdr_stream_url_base = "/vdr-luigi/";
 ?>

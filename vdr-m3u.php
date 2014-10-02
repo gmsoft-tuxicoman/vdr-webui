@@ -6,10 +6,7 @@ include 'vdr.php';
 include 'config.php';
 
 $vdr = vdr_open($vdr_host, $vdr_port);
-$base = '/';
-if (isset($vdr_stream_url_base))
-	$base = $vdr_stream_url_base;
-$channels = vdr_get_channels($vdr, $base);
+$channels = vdr_get_channels($vdr, $vdr_stream_url_base);
 vdr_close($vdr);
 
 $proto = "http://";

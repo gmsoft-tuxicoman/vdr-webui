@@ -14,10 +14,7 @@ $vdr = vdr_open($vdr_host, $vdr_port);
 $output = "Unknown method";
 
 if ($method == "channels") {
-	$base = '/';
-	if (isset($vdr_stream_url_base))
-		$base = $vdr_stream_url_base;
-	$output = vdr_get_channels($vdr, $base);
+	$output = vdr_get_channels($vdr, $vdr_stream_url_base);
 	if (isset($max_channels))
 		$output = array_slice($output, 0, $max_channels);
 } elseif ($method == "epg") {
