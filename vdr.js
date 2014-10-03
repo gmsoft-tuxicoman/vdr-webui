@@ -113,7 +113,10 @@ vdr.loadChannels = function() {
 	var me = this;
 	for (var idx in this.channels) {
 		var chan = this.channels[idx];
-		chans.push('<div class="chan_entry"><div id="chan_num" class="chan_list">' + chan['num'] + '</div><div class="chan_picon chan_list"><a href="' + chan['url'] + '"><img id="chan_picon_' + idx + '" class="chan_picon_img"/></a></div><div id="chan_name" class="chan_list"><a href="' + chan['url'] + '">' + chan['name'] + '</a></div></div>');
+		var cls = "chan_entry_hd";
+		if (chan['vtype'] != 27)
+			cls = "chan_entry_sd";
+		chans.push('<div class="chan_entry ' + cls + '"><div id="chan_num" class="chan_list">' + chan['num'] + '</div><div class="chan_picon chan_list"><a href="' + chan['url'] + '"><img id="chan_picon_' + idx + '" class="chan_picon_img"/></a></div><div id="chan_name" class="chan_list"><a href="' + chan['url'] + '">' + chan['name'] + '</a></div></div>');
 		epgs.push('<div id="chan_epg_' + idx + '" class="chan_epg"><div class="loading">Loading EPG ...</div></div>');
 	};
 	$("#chan_tab .loading").remove();

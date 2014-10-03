@@ -58,9 +58,16 @@ a:active {
 	border-color: #0033CC;
 	border-width: 2px;
 	border-style: solid;
-	background-color: #6699FF;
 	margin-top: 5px;
 	height: 34px;
+}
+
+.chan_entry_sd {
+	background-color: #A3C2FF;
+}
+
+.chan_entry_hd {
+	background-color: #6699FF;
 }
 
 .chan_picon {
