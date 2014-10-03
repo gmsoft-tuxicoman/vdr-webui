@@ -113,11 +113,44 @@ vdr.loadChannels = function() {
 	var me = this;
 	for (var idx in this.channels) {
 		var chan = this.channels[idx];
-		var cls = "chan_entry_hd";
+
+		var tooltip = "Channel : " + chan['name'] + "\nFormat : ";
 		if (chan['vtype'] != 27)
-			cls = "chan_entry_sd";
-		chans.push('<div class="chan_entry ' + cls + '"><div id="chan_num" class="chan_list">' + chan['num'] + '</div><div class="chan_picon chan_list"><a href="' + chan['url'] + '"><img id="chan_picon_' + idx + '" class="chan_picon_img"/></a></div><div id="chan_name" class="chan_list"><a href="' + chan['url'] + '">' + chan['name'] + '</a></div></div>');
-		epgs.push('<div id="chan_epg_' + idx + '" class="chan_epg"><div class="loading">Loading EPG ...</div></div>');
+			tooltip += "SD";
+		else
+			tooltip += "HD";
+		var src = chan['source'].substring(0, 1);
+		tooltip += "\nSource : DVB-" + src;
+		var freq = chan['freq'];
+		if (src == "S")
+			tooltip += ", Satellite position : " + chan['source'].substring(1);
+		else
+			freq /= 1000;
+
+		tooltip += "\nTransponder : Frequency " + freq + " MHz, SymbolRate " + (chan['symrate'] / 1000) + " MSym/s\nEncryption : ";
+		if (chan['caid'] != "0")
+			tooltip += "crypted";
+		else
+			tooltip += "clear";
+
+		var regex = /[a-z]{3}/g;
+		var lang = regex.exec(chan['apid']);
+
+		if (lang) {
+			tooltip += "\nAvailable languages : ";
+			tooltip += lang;
+			while (lang = regex.exec(chan['apid']))
+				tooltip += ", " + lang;
+		}
+
+		var chan_cls = "chan_entry_hd";
+		var epg_cls = "chan_epg_hd";
+		if (chan['vtype'] != 27) {
+			chan_cls = "chan_entry_sd";
+			epg_cls = "chan_epg_sd";
+		}
+		chans.push('<div class="chan_entry ' +  chan_cls + '" title="' + tooltip +'"><div id="chan_num" class="chan_list">' + chan['num'] + '</div><div class="chan_picon chan_list"><a href="' + chan['url'] + '"><img id="chan_picon_' + idx + '" class="chan_picon_img"/></a></div><div id="chan_name" class="chan_list"><a href="' + chan['url'] + '">' + chan['name'] + '</a></div></div>');
+		epgs.push('<div id="chan_epg_' + idx + '" class="chan_epg ' + epg_cls + '"><div class="loading">Loading EPG ...</div></div>');
 	};
 	$("#chan_tab .loading").remove();
 	$("#chan_tab").append(chans.join(""));
